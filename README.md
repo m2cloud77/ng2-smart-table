@@ -1,3 +1,52 @@
+
+## repo for npm intall
+```
+$ git co -v v1.7.0
+$ npm run build:lib
+$ git co npm-v1.7.0
+$ cp -Rf ./dist/ng2-smart-table/* .
+$ git add
+$ git commit -m "dist v1.7.0"
+```
+
+
+### Pager size: 4 --> 10
+
+edit ./projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+```
+git diff ./projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+diff --git a/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts b/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+index 36ce0e2..4aa8b4f 100644
+--- a/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
++++ b/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+@@ -149,7 +149,7 @@ export class PagerComponent implements OnChanges {
+
+   initPages() {
+     const pagesCount = this.getLast();
+-    let showPagesCount = 4;
++    let showPagesCount = 10;
+     showPagesCount = pagesCount < showPagesCount ? pagesCount : showPagesCount;
+     this.pages = [];
+```
+
+tsc Error:
+```
+Compiling TypeScript sources through ngc
+ERROR: node_modules/ng2-completer/src/modules/ng2-completer.module.d.ts:3:23 - error TS2314: Generic type 'ModuleWithProviders<T>' requires 1 type argument(s).
+
+3     static forRoot(): ModuleWithProviders;
+                        ~~~~~~~~~~~~~~~~~~~
+```
+
+fix: node_modules/ng2-completer/src/modules/ng2-completer.module.d.ts
+```
+    static forRoot(): ModuleWithProviders<Ng2CompleterModule>;
+    static forChild(): ModuleWithProviders<Ng2CompleterModule>;
+```
+
+
+----
+
 [![Build Status](https://travis-ci.org/akveo/ng2-smart-table.svg?branch=master)](https://travis-ci.org/akveo/ng2-smart-table)
 
 # Angular Smart Table Component
