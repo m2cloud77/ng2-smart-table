@@ -9,8 +9,27 @@ $ git add
 $ git commit -m "dist v1.7.0"
 ```
 
+### Add `showPagesCount` settings
+: https://github.com/m2cloud77/ng2-smart-table/commit/17c5a14c6c74cfb6f2b8bdd07200d700407bdb3b
+-
+```javascript
+defaultSettings: Object = {
+    ...
+    pager: {
+      display: true,
+      page: 1,
+      perPage: 10,
+      showPagesCount: 10 
+    },
+    ...
+  };
+```
 
-### Pager size: 4 --> 10
+### Changed pager style
+- modified padding size
+: https://github.com/m2cloud77/ng2-smart-table/commit/6d9d57233cd6a23f1f7c9ced17c67d61a2efa6ce
+
+### Default show pages count: 4 --> 10
 
 edit ./projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
 ```
