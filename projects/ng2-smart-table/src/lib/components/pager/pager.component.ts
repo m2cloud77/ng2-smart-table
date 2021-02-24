@@ -65,6 +65,7 @@ export class PagerComponent implements OnChanges {
 
   @Input() source: DataSource;
   @Input() perPageSelect: any[] = [];
+  @Input() showPagesCount: number;
 
   @Output() changePage = new EventEmitter<any>();
 
@@ -149,7 +150,7 @@ export class PagerComponent implements OnChanges {
 
   initPages() {
     const pagesCount = this.getLast();
-    let showPagesCount = 10;
+    let showPagesCount = this.showPagesCount || 10;
     showPagesCount = pagesCount < showPagesCount ? pagesCount : showPagesCount;
     this.pages = [];
 

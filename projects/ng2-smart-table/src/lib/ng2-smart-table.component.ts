@@ -36,6 +36,7 @@ export class Ng2SmartTableComponent implements OnChanges, OnDestroy {
   isHideHeader: boolean;
   isHideSubHeader: boolean;
   isPagerDisplay: boolean;
+  showPagesCount: number;
   rowClassFunction: Function;
 
   grid: Grid;
@@ -85,6 +86,7 @@ export class Ng2SmartTableComponent implements OnChanges, OnDestroy {
       display: true,
       page: 1,
       perPage: 10,
+      showPagesCount: 10 
     },
     rowClassFunction: () => '',
   };
@@ -114,6 +116,7 @@ export class Ng2SmartTableComponent implements OnChanges, OnDestroy {
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.perPageSelect = this.grid.getSetting('pager.perPageSelect');
+    this.showPagesCount = this.grid.getSetting('pager.showPagesCount');
     this.rowClassFunction = this.grid.getSetting('rowClassFunction');
   }
 
