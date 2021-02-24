@@ -1,7 +1,7 @@
 
 ## repo for npm intall
 ```
-$ git co -v v1.7.0
+$ git co -v v1.7.0_m2c
 $ npm run build:lib
 $ git co npm-v1.7.0
 $ cp -Rf ./dist/ng2-smart-table/* .
