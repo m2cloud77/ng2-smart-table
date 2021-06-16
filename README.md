@@ -1,3 +1,78 @@
+# M2Clude
+
+## repo for npm intall
+```
+$ git co -v m2c
+$ npm run build:lib
+$ git co npm-v1.7.4
+$ cp -Rf ./dist/ng2-smart-table/* .
+$ git add
+$ git commit -m "dist v1.7.4"
+```
+
+### Merge: hide column configuration property 
+- 2021.06.16
+- add hide column configuration property ([#1151](https://github.com/yggg/ng2-smart-table/issues/1151)) ([0d43219](https://github.com/yggg/ng2-smart-table/commit/0d43219))
+
+### Add `showPagesCount` settings
+: https://github.com/m2cloud77/ng2-smart-table/commit/17c5a14c6c74cfb6f2b8bdd07200d700407bdb3b
+-
+```javascript
+defaultSettings: Object = {
+    ...
+    pager: {
+      display: true,
+      page: 1,
+      perPage: 10,
+      showPagesCount: 10 
+    },
+    ...
+  };
+```
+
+### Changed pager style
+- modified padding size
+: https://github.com/m2cloud77/ng2-smart-table/commit/6d9d57233cd6a23f1f7c9ced17c67d61a2efa6ce
+
+### Default show pages count: 4 --> 10
+
+edit ./projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+```
+git diff ./projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+diff --git a/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts b/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+index 36ce0e2..4aa8b4f 100644
+--- a/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
++++ b/projects/ng2-smart-table/src/lib/components/pager/pager.component.ts
+@@ -149,7 +149,7 @@ export class PagerComponent implements OnChanges {
+
+   initPages() {
+     const pagesCount = this.getLast();
+-    let showPagesCount = 4;
++    let showPagesCount = 10;
+     showPagesCount = pagesCount < showPagesCount ? pagesCount : showPagesCount;
+     this.pages = [];
+```
+
+tsc Error:
+```
+Compiling TypeScript sources through ngc
+ERROR: node_modules/ng2-completer/src/modules/ng2-completer.module.d.ts:3:23 - error TS2314: Generic type 'ModuleWithProviders<T>' requires 1 type argument(s).
+
+3     static forRoot(): ModuleWithProviders;
+                        ~~~~~~~~~~~~~~~~~~~
+```
+
+fix: node_modules/ng2-completer/src/modules/ng2-completer.module.d.ts
+```
+    static forRoot(): ModuleWithProviders<Ng2CompleterModule>;
+    static forChild(): ModuleWithProviders<Ng2CompleterModule>;
+```
+
+
+
+
+-------
+
 [![Build Status](https://travis-ci.org/akveo/ng2-smart-table.svg?branch=master)](https://travis-ci.org/akveo/ng2-smart-table)
 
 # Angular Smart Table Component
@@ -11,7 +86,7 @@ Due to project priority and resource constraints, this project is currently on l
 
 <a target="_blank" href="https://akveo.github.io/ng2-smart-table/">Live Demo</a>
 
-![alt tag](src/assets/img/demo.gif)
+![alt tag](projects/demo/src/assets/demo.gif)
 
 ## Installation
 

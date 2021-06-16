@@ -1,9 +1,21 @@
 {
   "name": "ng2-smart-table",
-  "version": "1.7.3",
-  "description": "Angular Smart Table",
-  "author": "akveo",
-  "license": "MIT",
+  "version": "1.7.4",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build:demo": "ng build demo --aot --prod",
+    "build:lib": "ng build ng2-smart-table --prod",
+    "build:ci": "npm run build:demo && npm run build:lib",
+    "docs:gh-pages": "npm run build:demo -- --base-href '/ng2-smart-table/' && ngh --dir ./dist/demo",
+    "test": "ng test",
+    "release": "npm run build:lib && npm run publish",
+    "publish": "npm publish --access=public dist/ng2-smart-table",
+    "changelog": "standard-changelog -p angular",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
   "dependencies": {
     "lodash": "^4.17.10",
     "tslib": "^2.0.0"
