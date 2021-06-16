@@ -186,6 +186,7 @@ class Column {
         this.type = '';
         this.class = '';
         this.width = '';
+        this.hide = false;
         this.isSortable = false;
         this.isEditable = true;
         this.isAddable = true;
@@ -222,6 +223,7 @@ class Column {
         this.title = this.settings['title'];
         this.class = this.settings['class'];
         this.width = this.settings['width'];
+        this.hide = !!this.settings['hide'];
         this.type = this.prepareType();
         this.editor = this.settings['editor'];
         this.filter = this.settings['filter'];
@@ -1755,11 +1757,14 @@ class Ng2SmartTableTbodyComponent {
         this.isActionDelete = this.grid.getSetting('actions.delete');
         this.noDataMessage = this.grid.getSetting('noDataMessage');
     }
+    getVisibleCells(cells) {
+        return (cells || []).filter((cell) => !cell.getColumn().hide);
+    }
 }
 Ng2SmartTableTbodyComponent.decorators = [
     { type: Component, args: [{
                 selector: '[ng2-st-tbody]',
-                template: "<tr *ngFor=\"let row of grid.getRows()\" (click)=\"userSelectRow.emit(row)\" (mouseover)=\"rowHover.emit(row)\" class=\"ng2-smart-row\" [className]=\"rowClassFunction(row)\" [ngClass]=\"{selected: row.isSelected}\">\n  <td *ngIf=\"isMultiSelectVisible\" class=\"ng2-smart-actions ng2-smart-action-multiple-select\" (click)=\"multipleSelectRow.emit(row)\">\n    <input type=\"checkbox\" class=\"form-control\" [ngModel]=\"row.isSelected\">\n  </td>\n  <td *ngIf=\"!row.isInEditing && showActionColumnLeft\" class=\"ng2-smart-actions\">\n    <ng2-st-tbody-custom [grid]=\"grid\" (custom)=\"custom.emit($event)\" [row]=\"row\" [source]=\"source\"></ng2-st-tbody-custom>\n\n    <ng2-st-tbody-edit-delete [grid]=\"grid\"\n                              [deleteConfirm]=\"deleteConfirm\"\n                              [editConfirm]=\"editConfirm\"\n                              (edit)=\"edit.emit(row)\"\n                              (delete)=\"delete.emit(row)\"\n                              (editRowSelect)=\"editRowSelect.emit($event)\"\n                              [row]=\"row\"\n                              [source]=\"source\">\n    </ng2-st-tbody-edit-delete>\n  </td>\n   <td *ngIf=\"row.isInEditing && showActionColumnLeft\"  class=\"ng2-smart-actions\">\n    <ng2-st-tbody-create-cancel [grid]=\"grid\" [row]=\"row\" [editConfirm]=\"editConfirm\"></ng2-st-tbody-create-cancel>\n  </td>\n  <td *ngFor=\"let cell of row.cells\">\n    <ng2-smart-table-cell [cell]=\"cell\"\n                          [grid]=\"grid\"\n                          [row]=\"row\"\n                          [isNew]=\"false\"\n                          [mode]=\"mode\"\n                          [editConfirm]=\"editConfirm\"\n                          [inputClass]=\"editInputClass\"\n                          [isInEditing]=\"row.isInEditing\">\n    </ng2-smart-table-cell>\n  </td>\n\n  <td *ngIf=\"row.isInEditing && showActionColumnRight\"  class=\"ng2-smart-actions\">\n    <ng2-st-tbody-create-cancel [grid]=\"grid\" [row]=\"row\" [editConfirm]=\"editConfirm\"></ng2-st-tbody-create-cancel>\n  </td>\n\n  <td *ngIf=\"!row.isInEditing && showActionColumnRight\" class=\"ng2-smart-actions\">\n    <ng2-st-tbody-custom [grid]=\"grid\" (custom)=\"custom.emit($event)\" [row]=\"row\" [source]=\"source\"></ng2-st-tbody-custom>\n\n    <ng2-st-tbody-edit-delete [grid]=\"grid\"\n                              [deleteConfirm]=\"deleteConfirm\"\n                              [editConfirm]=\"editConfirm\"\n                              [row]=\"row\"\n                              [source]=\"source\"\n                              (edit)=\"edit.emit(row)\"\n                              (delete)=\"delete.emit(row)\"\n                              (editRowSelect)=\"editRowSelect.emit($event)\">\n    </ng2-st-tbody-edit-delete>\n  </td>\n</tr>\n\n<tr *ngIf=\"grid.getRows().length == 0\">\n  <td [attr.colspan]=\"tableColumnsCount\">\n    {{ noDataMessage }}\n  </td>\n</tr>\n",
+                template: "<tr *ngFor=\"let row of grid.getRows()\" (click)=\"userSelectRow.emit(row)\" (mouseover)=\"rowHover.emit(row)\" class=\"ng2-smart-row\" [className]=\"rowClassFunction(row)\" [ngClass]=\"{selected: row.isSelected}\">\n  <td *ngIf=\"isMultiSelectVisible\" class=\"ng2-smart-actions ng2-smart-action-multiple-select\" (click)=\"multipleSelectRow.emit(row)\">\n    <input type=\"checkbox\" class=\"form-control\" [ngModel]=\"row.isSelected\">\n  </td>\n  <td *ngIf=\"!row.isInEditing && showActionColumnLeft\" class=\"ng2-smart-actions\">\n    <ng2-st-tbody-custom [grid]=\"grid\" (custom)=\"custom.emit($event)\" [row]=\"row\" [source]=\"source\"></ng2-st-tbody-custom>\n\n    <ng2-st-tbody-edit-delete [grid]=\"grid\"\n                              [deleteConfirm]=\"deleteConfirm\"\n                              [editConfirm]=\"editConfirm\"\n                              (edit)=\"edit.emit(row)\"\n                              (delete)=\"delete.emit(row)\"\n                              (editRowSelect)=\"editRowSelect.emit($event)\"\n                              [row]=\"row\"\n                              [source]=\"source\">\n    </ng2-st-tbody-edit-delete>\n  </td>\n   <td *ngIf=\"row.isInEditing && showActionColumnLeft\"  class=\"ng2-smart-actions\">\n    <ng2-st-tbody-create-cancel [grid]=\"grid\" [row]=\"row\" [editConfirm]=\"editConfirm\"></ng2-st-tbody-create-cancel>\n  </td>\n  <td *ngFor=\"let cell of getVisibleCells(row.cells)\">\n    <ng2-smart-table-cell [cell]=\"cell\"\n                          [grid]=\"grid\"\n                          [row]=\"row\"\n                          [isNew]=\"false\"\n                          [mode]=\"mode\"\n                          [editConfirm]=\"editConfirm\"\n                          [inputClass]=\"editInputClass\"\n                          [isInEditing]=\"row.isInEditing\">\n    </ng2-smart-table-cell>\n  </td>\n\n  <td *ngIf=\"row.isInEditing && showActionColumnRight\"  class=\"ng2-smart-actions\">\n    <ng2-st-tbody-create-cancel [grid]=\"grid\" [row]=\"row\" [editConfirm]=\"editConfirm\"></ng2-st-tbody-create-cancel>\n  </td>\n\n  <td *ngIf=\"!row.isInEditing && showActionColumnRight\" class=\"ng2-smart-actions\">\n    <ng2-st-tbody-custom [grid]=\"grid\" (custom)=\"custom.emit($event)\" [row]=\"row\" [source]=\"source\"></ng2-st-tbody-custom>\n\n    <ng2-st-tbody-edit-delete [grid]=\"grid\"\n                              [deleteConfirm]=\"deleteConfirm\"\n                              [editConfirm]=\"editConfirm\"\n                              [row]=\"row\"\n                              [source]=\"source\"\n                              (edit)=\"edit.emit(row)\"\n                              (delete)=\"delete.emit(row)\"\n                              (editRowSelect)=\"editRowSelect.emit($event)\">\n    </ng2-st-tbody-edit-delete>\n  </td>\n</tr>\n\n<tr *ngIf=\"grid.getRows().length == 0\">\n  <td [attr.colspan]=\"tableColumnsCount\">\n    {{ noDataMessage }}\n  </td>\n</tr>\n",
                 styles: [":host .ng2-smart-row.selected{background:rgba(0,0,0,.05)}:host .ng2-smart-row .ng2-smart-actions.ng2-smart-action-multiple-select{text-align:center}:host ::ng-deep ng2-st-tbody-create-cancel a:first-child,:host ::ng-deep ng2-st-tbody-edit-delete a:first-child{margin-right:.25rem}"]
             },] }
 ];
@@ -2174,6 +2179,9 @@ class TheadFitlersRowComponent {
         this.showActionColumnRight = this.grid.showActionColumn('right');
         this.filterInputClass = this.grid.getSetting('filter.inputClass');
     }
+    getVisibleColumns(columns) {
+        return (columns || []).filter((column) => !column.hide);
+    }
 }
 TheadFitlersRowComponent.decorators = [
     { type: Component, args: [{
@@ -2184,7 +2192,7 @@ TheadFitlersRowComponent.decorators = [
                           [grid]="grid"
                           (create)="create.emit($event)">
     </th>
-    <th *ngFor="let column of grid.getColumns()" class="ng2-smart-th {{ column.id }}">
+    <th *ngFor="let column of getVisibleColumns(grid.getColumns())" class="ng2-smart-th {{ column.id }}">
       <ng2-smart-table-filter [source]="source"
                               [column]="column"
                               [inputClass]="filterInputClass"
@@ -2220,6 +2228,9 @@ class TheadFormRowComponent {
         this.showActionColumnRight = this.grid.showActionColumn('right');
         this.addInputClass = this.grid.getSetting('add.inputClass');
     }
+    getVisibleCells(cells) {
+        return (cells || []).filter((cell) => !cell.getColumn().hide);
+    }
 }
 TheadFormRowComponent.decorators = [
     { type: Component, args: [{
@@ -2229,7 +2240,7 @@ TheadFormRowComponent.decorators = [
       <td  *ngIf="showActionColumnLeft"  class="ng2-smart-actions">
         <ng2-st-actions [grid]="grid" (create)="onCreate($event)"></ng2-st-actions>
       </td>
-      <td *ngFor="let cell of grid.getNewRow().getCells()">
+      <td *ngFor="let cell of getVisibleCells(grid.getNewRow().getCells())">
         <ng2-smart-table-cell [cell]="cell"
                               [grid]="grid"
                               [isNew]="true"
@@ -2262,6 +2273,9 @@ class TheadTitlesRowComponent {
         this.showActionColumnLeft = this.grid.showActionColumn('left');
         this.showActionColumnRight = this.grid.showActionColumn('right');
     }
+    getVisibleColumns(columns) {
+        return (columns || []).filter((column) => !column.hide);
+    }
 }
 TheadTitlesRowComponent.decorators = [
     { type: Component, args: [{
@@ -2274,8 +2288,10 @@ TheadTitlesRowComponent.decorators = [
                                    (click)="selectAllRows.emit($event)">
     </th>
     <th ng2-st-actions-title *ngIf="showActionColumnLeft" [grid]="grid"></th>
-    <th *ngFor="let column of grid.getColumns()" class="ng2-smart-th {{ column.id }}" [ngClass]="column.class"
-      [style.width]="column.width" >
+    <th *ngFor="let column of getVisibleColumns(grid.getColumns())"
+        class="ng2-smart-th {{ column.id }}"
+        [ngClass]="column.class"
+        [style.width]="column.width">
       <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
     </th>
     <th ng2-st-actions-title *ngIf="showActionColumnRight" [grid]="grid"></th>

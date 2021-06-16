@@ -7,6 +7,7 @@ export declare class Column {
     type: string;
     class: string;
     width: string;
+    hide: boolean;
     isSortable: boolean;
     isEditable: boolean;
     isAddable: boolean;

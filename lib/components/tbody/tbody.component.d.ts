@@ -1,6 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { Grid } from '../../lib/grid';
 import { DataSource } from '../../lib/data-source/data-source';
+import { Cell } from '../../lib/data-set/cell';
 export declare class Ng2SmartTableTbodyComponent {
     grid: Grid;
     source: DataSource;
@@ -28,4 +29,5 @@ export declare class Ng2SmartTableTbodyComponent {
     noDataMessage: boolean;
     get tableColumnsCount(): number;
     ngOnChanges(): void;
+    getVisibleCells(cells: Array<Cell>): Array<Cell>;
 }
